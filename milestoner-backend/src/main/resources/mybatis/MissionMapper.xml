@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.milestoner.mapper.MissionMapper">
+  <resultMap id="BaseResultMap" type="com.milestoner.domain.Mission">
+    <id column="mission_id" jdbcType="INTEGER" property="missionId" />
+    <result column="fk_user_id" jdbcType="INTEGER" property="fkUserId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="date" jdbcType="DATE" property="date" />
+    <result column="status" jdbcType="VARCHAR" property="status" />
+    <result column="complete_points" jdbcType="INTEGER" property="completePoints"></result>
+  </resultMap>
+  <sql id="Base_Column_List">
+    mission_id, fk_user_id, title, description, `date`, `status`, complete_points
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from mission
+    where mission_id = #{missionId,jdbcType=INTEGER}
+  </select>
+  <insert id="create">
+    insert into mission(fk_user_id, title, description, date, status, complete_points)
+    values (#{fkUserId}, #{title}, #{description}, #{date}, #{status}, #{completePoints})
+  </insert>
+  <select id="selectByUserId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mission m
+    where m.fk_user_id = #{userId}
+        and m.date >= current_date
+        and status = '0'
+  </select>
+  <update id="updateStatus">
+    update mission set status = #{status}
+    where mission_id = #{missionId}
+  </update>
+  <select id="getUsersPoints" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+    select sum(complete_points)
+    from mission
+    where fk_user_id = #{userId}
+        and status = '1'
+  </select>
+</mapper>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.milestoner.mapper.TierMapper">
+  <resultMap id="BaseResultMap" type="com.milestoner.domain.Tier">
+    <id column="tier_id" jdbcType="INTEGER" property="tierId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="lowest_points" jdbcType="INTEGER" property="lowestPoints" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    tier_id, `name`, lowest_points
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from tier
+    where tier_id = #{tierId,jdbcType=INTEGER}
+  </select>
+</mapper>

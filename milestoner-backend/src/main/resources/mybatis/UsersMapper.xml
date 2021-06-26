@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.milestoner.mapper.UsersMapper">
+  <resultMap id="BaseResultMap" type="com.milestoner.domain.Users">
+    <id column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="fk_profession_id" jdbcType="INTEGER" property="fkProfessionId" />
+    <result column="email" jdbcType="VARCHAR" property="email" />
+    <result column="password" jdbcType="VARCHAR" property="password" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="points" jdbcType="INTEGER" property="points" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    user_id, fk_profession_id, email, `password`, `name`, points
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from users
+    where user_id = #{userId,jdbcType=INTEGER}
+  </select>
+  <select id="selectByEmail" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from users
+    where email = #{email}
+  </select>
+  <select id="selectUsersByProfession" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from users
+    where fk_profession_id = #{professionId}
+    order by points desc
+  </select>
+  <update id="updatePoints">
+    update users
+    set points = #{points}
+    where user_id = #{userId}
+  </update>
+  <insert id="createUser">
+    insert into users (fk_profession_id, email, password, name)
+    values (#{fkProfessionId}, #{email}, #{password}, #{name})
+  </insert>
+</mapper>
